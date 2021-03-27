@@ -1,5 +1,5 @@
 ﻿
-namespace STRIALG_TRIE
+namespace STRIALG_HASH
 {
     partial class Form1
     {
@@ -39,29 +39,30 @@ namespace STRIALG_TRIE
             this.dToolStripMenuItem = new System.Windows.Forms.ToolStripSeparator();
             this.ExitStripItem = new System.Windows.Forms.ToolStripMenuItem();
             this.редактированиеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.AddTreeModStripItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.DeleteTreeModStripItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ClearTreeModStripItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AddSetCreateModStripItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DeleteSetDeleteModStripItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ClearSetDeleteModStripItem = new System.Windows.Forms.ToolStripMenuItem();
             this.поискToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.FindTreeOpStripItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.FindSetOpStripItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.CreateFileToolStripItem = new System.Windows.Forms.ToolStripButton();
             this.OpenFileToolStripItem = new System.Windows.Forms.ToolStripButton();
             this.SaveFileToolStripItem = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.AddTreeModToolStripItem = new System.Windows.Forms.ToolStripButton();
-            this.DeleteTreeModToolStripItem = new System.Windows.Forms.ToolStripButton();
-            this.ClearTreeModToolStripItem = new System.Windows.Forms.ToolStripButton();
+            this.AddSetCreateModToolStripItem = new System.Windows.Forms.ToolStripButton();
+            this.DeleteSetDeleteModToolStripItem = new System.Windows.Forms.ToolStripButton();
+            this.ClearSetDeleteModToolStripItem = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.FindTreeOpToolStripItem = new System.Windows.Forms.ToolStripButton();
+            this.FindSetOpToolStripItem = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.ExitToolStripItem = new System.Windows.Forms.ToolStripButton();
-            this.MainTreeView = new System.Windows.Forms.TreeView();
             this.SaveFileDialogWindow = new System.Windows.Forms.SaveFileDialog();
             this.OpenFileDialogWindow = new System.Windows.Forms.OpenFileDialog();
             this.FileNameLabel = new System.Windows.Forms.Label();
+            this.MainDataGridView = new System.Windows.Forms.DataGridView();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MainDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -93,21 +94,24 @@ namespace STRIALG_TRIE
             // CreateFileStripItem
             // 
             this.CreateFileStripItem.Name = "CreateFileStripItem";
-            this.CreateFileStripItem.ShortcutKeyDisplayString = "Ctrl+N";
+            this.CreateFileStripItem.ShortcutKeyDisplayString = "";
+            this.CreateFileStripItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.CreateFileStripItem.Size = new System.Drawing.Size(224, 26);
             this.CreateFileStripItem.Text = "Новый...";
             // 
             // OpenFileStripItem
             // 
             this.OpenFileStripItem.Name = "OpenFileStripItem";
-            this.OpenFileStripItem.ShortcutKeyDisplayString = "Ctrl+O";
+            this.OpenFileStripItem.ShortcutKeyDisplayString = "";
+            this.OpenFileStripItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.OpenFileStripItem.Size = new System.Drawing.Size(224, 26);
             this.OpenFileStripItem.Text = "Открыть...";
             // 
             // SaveFileStripItem
             // 
             this.SaveFileStripItem.Name = "SaveFileStripItem";
-            this.SaveFileStripItem.ShortcutKeyDisplayString = "Ctrl+S";
+            this.SaveFileStripItem.ShortcutKeyDisplayString = "";
+            this.SaveFileStripItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.SaveFileStripItem.Size = new System.Drawing.Size(224, 26);
             this.SaveFileStripItem.Text = "Сохранить";
             // 
@@ -125,55 +129,60 @@ namespace STRIALG_TRIE
             // ExitStripItem
             // 
             this.ExitStripItem.Name = "ExitStripItem";
-            this.ExitStripItem.ShortcutKeyDisplayString = "Ctrl+Q";
+            this.ExitStripItem.ShortcutKeyDisplayString = "";
+            this.ExitStripItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
             this.ExitStripItem.Size = new System.Drawing.Size(224, 26);
             this.ExitStripItem.Text = "Выйти";
             // 
             // редактированиеToolStripMenuItem
             // 
             this.редактированиеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.AddTreeModStripItem,
-            this.DeleteTreeModStripItem,
-            this.ClearTreeModStripItem});
+            this.AddSetCreateModStripItem,
+            this.DeleteSetDeleteModStripItem,
+            this.ClearSetDeleteModStripItem});
             this.редактированиеToolStripMenuItem.Name = "редактированиеToolStripMenuItem";
             this.редактированиеToolStripMenuItem.Size = new System.Drawing.Size(137, 24);
             this.редактированиеToolStripMenuItem.Text = "Редактирование";
             // 
-            // AddTreeModStripItem
+            // AddSetCreateModStripItem
             // 
-            this.AddTreeModStripItem.Name = "AddTreeModStripItem";
-            this.AddTreeModStripItem.ShortcutKeyDisplayString = "Ctrl+A";
-            this.AddTreeModStripItem.Size = new System.Drawing.Size(270, 26);
-            this.AddTreeModStripItem.Text = "Добавить слово...";
+            this.AddSetCreateModStripItem.Name = "AddSetCreateModStripItem";
+            this.AddSetCreateModStripItem.ShortcutKeyDisplayString = "";
+            this.AddSetCreateModStripItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+            this.AddSetCreateModStripItem.Size = new System.Drawing.Size(270, 26);
+            this.AddSetCreateModStripItem.Text = "Добавить слово...";
             // 
-            // DeleteTreeModStripItem
+            // DeleteSetDeleteModStripItem
             // 
-            this.DeleteTreeModStripItem.Name = "DeleteTreeModStripItem";
-            this.DeleteTreeModStripItem.ShortcutKeyDisplayString = "Ctrl+D";
-            this.DeleteTreeModStripItem.Size = new System.Drawing.Size(270, 26);
-            this.DeleteTreeModStripItem.Text = "Удалить слово...";
+            this.DeleteSetDeleteModStripItem.Name = "DeleteSetDeleteModStripItem";
+            this.DeleteSetDeleteModStripItem.ShortcutKeyDisplayString = "";
+            this.DeleteSetDeleteModStripItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
+            this.DeleteSetDeleteModStripItem.Size = new System.Drawing.Size(270, 26);
+            this.DeleteSetDeleteModStripItem.Text = "Удалить слово...";
             // 
-            // ClearTreeModStripItem
+            // ClearSetDeleteModStripItem
             // 
-            this.ClearTreeModStripItem.Name = "ClearTreeModStripItem";
-            this.ClearTreeModStripItem.ShortcutKeyDisplayString = "Ctrl+K";
-            this.ClearTreeModStripItem.Size = new System.Drawing.Size(270, 26);
-            this.ClearTreeModStripItem.Text = "Очистить дерево...";
+            this.ClearSetDeleteModStripItem.Name = "ClearSetDeleteModStripItem";
+            this.ClearSetDeleteModStripItem.ShortcutKeyDisplayString = "";
+            this.ClearSetDeleteModStripItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
+            this.ClearSetDeleteModStripItem.Size = new System.Drawing.Size(270, 26);
+            this.ClearSetDeleteModStripItem.Text = "Очистить дерево...";
             // 
             // поискToolStripMenuItem
             // 
             this.поискToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.FindTreeOpStripItem});
+            this.FindSetOpStripItem});
             this.поискToolStripMenuItem.Name = "поискToolStripMenuItem";
             this.поискToolStripMenuItem.Size = new System.Drawing.Size(66, 24);
             this.поискToolStripMenuItem.Text = "Поиск";
             // 
-            // FindTreeOpStripItem
+            // FindSetOpStripItem
             // 
-            this.FindTreeOpStripItem.Name = "FindTreeOpStripItem";
-            this.FindTreeOpStripItem.ShortcutKeyDisplayString = "Ctrl+F";
-            this.FindTreeOpStripItem.Size = new System.Drawing.Size(237, 26);
-            this.FindTreeOpStripItem.Text = "Поиск слова...";
+            this.FindSetOpStripItem.Name = "FindSetOpStripItem";
+            this.FindSetOpStripItem.ShortcutKeyDisplayString = "";
+            this.FindSetOpStripItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+            this.FindSetOpStripItem.Size = new System.Drawing.Size(237, 26);
+            this.FindSetOpStripItem.Text = "Поиск слова...";
             // 
             // toolStrip1
             // 
@@ -183,11 +192,11 @@ namespace STRIALG_TRIE
             this.OpenFileToolStripItem,
             this.SaveFileToolStripItem,
             this.toolStripSeparator1,
-            this.AddTreeModToolStripItem,
-            this.DeleteTreeModToolStripItem,
-            this.ClearTreeModToolStripItem,
+            this.AddSetCreateModToolStripItem,
+            this.DeleteSetDeleteModToolStripItem,
+            this.ClearSetDeleteModToolStripItem,
             this.toolStripSeparator2,
-            this.FindTreeOpToolStripItem,
+            this.FindSetOpToolStripItem,
             this.toolStripSeparator3,
             this.ExitToolStripItem});
             this.toolStrip1.Location = new System.Drawing.Point(0, 28);
@@ -228,46 +237,46 @@ namespace STRIALG_TRIE
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
             // 
-            // AddTreeModToolStripItem
+            // AddSetCreateModToolStripItem
             // 
-            this.AddTreeModToolStripItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.AddTreeModToolStripItem.Image = ((System.Drawing.Image)(resources.GetObject("AddTreeModToolStripItem.Image")));
-            this.AddTreeModToolStripItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.AddTreeModToolStripItem.Name = "AddTreeModToolStripItem";
-            this.AddTreeModToolStripItem.Size = new System.Drawing.Size(29, 24);
-            this.AddTreeModToolStripItem.Text = "Добавить слово (Ctrl+A)";
+            this.AddSetCreateModToolStripItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.AddSetCreateModToolStripItem.Image = ((System.Drawing.Image)(resources.GetObject("AddSetCreateModToolStripItem.Image")));
+            this.AddSetCreateModToolStripItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.AddSetCreateModToolStripItem.Name = "AddSetCreateModToolStripItem";
+            this.AddSetCreateModToolStripItem.Size = new System.Drawing.Size(29, 24);
+            this.AddSetCreateModToolStripItem.Text = "Добавить слово (Ctrl+A)";
             // 
-            // DeleteTreeModToolStripItem
+            // DeleteSetDeleteModToolStripItem
             // 
-            this.DeleteTreeModToolStripItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.DeleteTreeModToolStripItem.Image = ((System.Drawing.Image)(resources.GetObject("DeleteTreeModToolStripItem.Image")));
-            this.DeleteTreeModToolStripItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.DeleteTreeModToolStripItem.Name = "DeleteTreeModToolStripItem";
-            this.DeleteTreeModToolStripItem.Size = new System.Drawing.Size(29, 24);
-            this.DeleteTreeModToolStripItem.Text = "Удалить слово (Ctrl+D)";
+            this.DeleteSetDeleteModToolStripItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.DeleteSetDeleteModToolStripItem.Image = ((System.Drawing.Image)(resources.GetObject("DeleteSetDeleteModToolStripItem.Image")));
+            this.DeleteSetDeleteModToolStripItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.DeleteSetDeleteModToolStripItem.Name = "DeleteSetDeleteModToolStripItem";
+            this.DeleteSetDeleteModToolStripItem.Size = new System.Drawing.Size(29, 24);
+            this.DeleteSetDeleteModToolStripItem.Text = "Удалить слово (Ctrl+D)";
             // 
-            // ClearTreeModToolStripItem
+            // ClearSetDeleteModToolStripItem
             // 
-            this.ClearTreeModToolStripItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.ClearTreeModToolStripItem.Image = ((System.Drawing.Image)(resources.GetObject("ClearTreeModToolStripItem.Image")));
-            this.ClearTreeModToolStripItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.ClearTreeModToolStripItem.Name = "ClearTreeModToolStripItem";
-            this.ClearTreeModToolStripItem.Size = new System.Drawing.Size(29, 24);
-            this.ClearTreeModToolStripItem.Text = "Очистить дерево (Ctrl+K)";
+            this.ClearSetDeleteModToolStripItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.ClearSetDeleteModToolStripItem.Image = ((System.Drawing.Image)(resources.GetObject("ClearSetDeleteModToolStripItem.Image")));
+            this.ClearSetDeleteModToolStripItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ClearSetDeleteModToolStripItem.Name = "ClearSetDeleteModToolStripItem";
+            this.ClearSetDeleteModToolStripItem.Size = new System.Drawing.Size(29, 24);
+            this.ClearSetDeleteModToolStripItem.Text = "Очистить дерево (Ctrl+K)";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
             // 
-            // FindTreeOpToolStripItem
+            // FindSetOpToolStripItem
             // 
-            this.FindTreeOpToolStripItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.FindTreeOpToolStripItem.Image = ((System.Drawing.Image)(resources.GetObject("FindTreeOpToolStripItem.Image")));
-            this.FindTreeOpToolStripItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.FindTreeOpToolStripItem.Name = "FindTreeOpToolStripItem";
-            this.FindTreeOpToolStripItem.Size = new System.Drawing.Size(29, 24);
-            this.FindTreeOpToolStripItem.Text = "Найти слово (Ctrl+F)";
+            this.FindSetOpToolStripItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.FindSetOpToolStripItem.Image = ((System.Drawing.Image)(resources.GetObject("FindSetOpToolStripItem.Image")));
+            this.FindSetOpToolStripItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.FindSetOpToolStripItem.Name = "FindSetOpToolStripItem";
+            this.FindSetOpToolStripItem.Size = new System.Drawing.Size(29, 24);
+            this.FindSetOpToolStripItem.Text = "Найти слово (Ctrl+F)";
             // 
             // toolStripSeparator3
             // 
@@ -283,23 +292,15 @@ namespace STRIALG_TRIE
             this.ExitToolStripItem.Size = new System.Drawing.Size(29, 24);
             this.ExitToolStripItem.Text = "Выйти (Ctrl+Q)";
             // 
-            // MainTreeView
-            // 
-            this.MainTreeView.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.MainTreeView.Location = new System.Drawing.Point(12, 95);
-            this.MainTreeView.Name = "MainTreeView";
-            this.MainTreeView.Size = new System.Drawing.Size(351, 348);
-            this.MainTreeView.TabIndex = 2;
-            // 
             // SaveFileDialogWindow
             // 
             this.SaveFileDialogWindow.DefaultExt = "txt";
-            this.SaveFileDialogWindow.Filter = "\"Текстовые файлы|*.txt\"";
+            this.SaveFileDialogWindow.Filter = "\"Текстовые файлы|*.txt|Типизированные файлы|*.bin\"";
             // 
             // OpenFileDialogWindow
             // 
             this.OpenFileDialogWindow.DefaultExt = "txt";
-            this.OpenFileDialogWindow.Filter = "\"Текстовые файлы|*.txt\"";
+            this.OpenFileDialogWindow.Filter = "\"Текстовые файлы|*.txt|Типизированные файлы|*.bin\"";
             // 
             // FileNameLabel
             // 
@@ -311,13 +312,23 @@ namespace STRIALG_TRIE
             this.FileNameLabel.TabIndex = 3;
             this.FileNameLabel.Text = "label1";
             // 
+            // MainDataGridView
+            // 
+            this.MainDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.MainDataGridView.Location = new System.Drawing.Point(12, 95);
+            this.MainDataGridView.Name = "MainDataGridView";
+            this.MainDataGridView.RowHeadersWidth = 51;
+            this.MainDataGridView.RowTemplate.Height = 24;
+            this.MainDataGridView.Size = new System.Drawing.Size(351, 348);
+            this.MainDataGridView.TabIndex = 4;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(375, 455);
+            this.Controls.Add(this.MainDataGridView);
             this.Controls.Add(this.FileNameLabel);
-            this.Controls.Add(this.MainTreeView);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
             this.KeyPreview = true;
@@ -328,11 +339,11 @@ namespace STRIALG_TRIE
             this.Name = "Form1";
             this.ShowIcon = false;
             this.Text = "Trie-дерево";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MainDataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -349,27 +360,27 @@ namespace STRIALG_TRIE
         private System.Windows.Forms.ToolStripButton OpenFileToolStripItem;
         private System.Windows.Forms.ToolStripButton SaveFileToolStripItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton AddTreeModToolStripItem;
-        private System.Windows.Forms.ToolStripButton DeleteTreeModToolStripItem;
-        private System.Windows.Forms.ToolStripButton ClearTreeModToolStripItem;
+        private System.Windows.Forms.ToolStripButton AddSetCreateModToolStripItem;
+        private System.Windows.Forms.ToolStripButton DeleteSetDeleteModToolStripItem;
+        private System.Windows.Forms.ToolStripButton ClearSetDeleteModToolStripItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripButton FindTreeOpToolStripItem;
+        private System.Windows.Forms.ToolStripButton FindSetOpToolStripItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton ExitToolStripItem;
-        private System.Windows.Forms.TreeView MainTreeView;
         private System.Windows.Forms.ToolStripMenuItem CreateFileStripItem;
         private System.Windows.Forms.ToolStripMenuItem OpenFileStripItem;
         private System.Windows.Forms.ToolStripMenuItem SaveFileStripItem;
         private System.Windows.Forms.ToolStripMenuItem SaveAsFileStripItem;
-        private System.Windows.Forms.ToolStripMenuItem AddTreeModStripItem;
-        private System.Windows.Forms.ToolStripMenuItem DeleteTreeModStripItem;
-        private System.Windows.Forms.ToolStripMenuItem ClearTreeModStripItem;
-        private System.Windows.Forms.ToolStripMenuItem FindTreeOpStripItem;
+        private System.Windows.Forms.ToolStripMenuItem AddSetCreateModStripItem;
+        private System.Windows.Forms.ToolStripMenuItem DeleteSetDeleteModStripItem;
+        private System.Windows.Forms.ToolStripMenuItem ClearSetDeleteModStripItem;
+        private System.Windows.Forms.ToolStripMenuItem FindSetOpStripItem;
         private System.Windows.Forms.ToolStripSeparator dToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ExitStripItem;
         private System.Windows.Forms.SaveFileDialog SaveFileDialogWindow;
         private System.Windows.Forms.OpenFileDialog OpenFileDialogWindow;
         private System.Windows.Forms.Label FileNameLabel;
+        private System.Windows.Forms.DataGridView MainDataGridView;
     }
 }
 

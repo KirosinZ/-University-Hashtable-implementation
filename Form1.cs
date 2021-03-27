@@ -2,14 +2,24 @@
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
+using System.Runtime.Serialization.Formatters.Binary;
 
-namespace STRIALG_TRIE
+namespace STRIALG_HASH
 {
     public partial class Form1 : Form
     {
         bool HasUnsavedData = false;
-        string CurrentFilePath = "*.txt";
-        TrieTree MainTree;
+        string CurrentFilePath = "*.bin";
+        HashSet<int, Record> MainSet;
+
+        static string ToText(HashSetEntry<int, Record> entry) => entry.Key.ToString() + ":" + entry.Value.PersonnelNumber.ToString() + ";" + entry.Value.FIO + ";" + entry.Value.Salary.ToString();
+
+        static HashSetEntry<int, Record> FromText(string s)
+        {
+            var props = s.Split(':');
+            var recprops = props[1].Split(';');
+            return new HashSetEntry<int, Record>(Convert.ToInt32(props[0]), new Record(Convert.ToInt32(recprops[0]), recprops[1], Convert.ToDecimal(recprops[2])));
+        }
 
         [Flags]
         public enum Actuators
@@ -19,8 +29,10 @@ namespace STRIALG_TRIE
             Create = 1,
             Open = 2,
             Save = 4,
-            TreeOps = 8,
-            Exit = 16
+            SetCreateMods = 8,
+            SetDeleteMods = 16,
+            SetOps = 32,
+            Exit = 64
         }
 
         Actuators State = Actuators.Create | Actuators.Open | Actuators.Exit;
@@ -33,7 +45,7 @@ namespace STRIALG_TRIE
                 {
                     case DialogResult.Yes:
                     {
-                        HasUnsavedData = !SaveFile(CurrentFilePath == "*.txt");
+                        HasUnsavedData = !SaveFile(CurrentFilePath == "*.bin");
                         return !HasUnsavedData;
                     }
                     case DialogResult.No:
@@ -54,11 +66,11 @@ namespace STRIALG_TRIE
         {
             if (!VerifySave()) return;
 
-            FileNameLabel.Text = CurrentFilePath = "*.txt";
-            MainTree = new TrieTree();
+            FileNameLabel.Text = CurrentFilePath = "*.bin";
+            MainSet = new HashSet<int, Record>();
             HasUnsavedData = true;
 
-            State = Actuators.All;
+            State = Actuators.All & ~Actuators.SetDeleteMods;
             UpdateState();
         }
 
@@ -70,18 +82,35 @@ namespace STRIALG_TRIE
             {
                 FileNameLabel.Text = CurrentFilePath = OpenFileDialogWindow.FileName;
                 FileNameLabel.Text = FileNameLabel.Text.Remove(0, FileNameLabel.Text.LastIndexOf('\\') + 1);
-                StreamReader text = new StreamReader(CurrentFilePath);
-                MainTree = new TrieTree();
-                while (!text.EndOfStream)
+                string ext = CurrentFilePath.Remove(0, CurrentFilePath.LastIndexOf('.'));
+
+                switch(ext)
                 {
-                    MainTree.AddWord(text.ReadLine());
+                    case ".txt":
+                    {
+                        StreamReader text = new StreamReader(CurrentFilePath);
+                        MainSet = new HashSet<int, Record>();
+                        while (!text.EndOfStream)
+                        {
+                            string s = text.ReadLine();
+                            MainSet.Add(FromText(s));
+                        }
+                        text.Close();
+                        break;
+                    }
+                    case ".bin":
+                    {
+                        BinaryFormatter bin = new BinaryFormatter();
+                        MainSet = (HashSet<int, Record>)bin.Deserialize(new FileStream(CurrentFilePath, FileMode.Open));
+                        break;
+                    }
+                    default: throw new Exception("Файл имел неверное расширение.");
                 }
-                text.Close();
-                DrawTree(MainTree, MainTreeView);
+                DrawSet(MainSet, MainDataGridView);
 
                 HasUnsavedData = false;
 
-                State = Actuators.All;
+                State = Actuators.All & ~Actuators.SetDeleteMods;
                 UpdateState();
             }
         }
@@ -94,90 +123,77 @@ namespace STRIALG_TRIE
                 FileNameLabel.Text = CurrentFilePath = SaveFileDialogWindow.FileName;
                 FileNameLabel.Text = FileNameLabel.Text.Remove(0, FileNameLabel.Text.LastIndexOf('\\') + 1);
             }
-            StreamWriter text = new StreamWriter(CurrentFilePath, false);
-            foreach (string s in MainTree)
+            string ext = CurrentFilePath.Remove(0, CurrentFilePath.LastIndexOf('.'));
+
+            switch(ext)
             {
-                text.WriteLine(s);
+                case ".txt":
+                {
+                    StreamWriter text = new StreamWriter(CurrentFilePath);
+                    MainSet = new HashSet<int, Record>();
+                    foreach (var s in MainSet)
+                    {
+                        text.WriteLine(ToText(s));
+                    }
+                    text.Close();
+                    break;
+                }
+                case ".bin":
+                {
+                    BinaryFormatter bin = new BinaryFormatter();
+                    bin.Serialize(new FileStream(CurrentFilePath, FileMode.Create), MainSet);
+                    break;
+                }
+                default: throw new Exception("Файл имел неверное расширение.");
             }
-            text.Close();
 
             HasUnsavedData = false;
             return true;
         }
 
-        public void AddTreeMod()
+        public void AddSetCreateMod()
         {
-            WordsForm tmp = new WordsForm("Добавить", "Введите слово или слова:");
+            RecordForm tmp = new RecordForm("Добавить", "Создание записи:");
             if (tmp.ShowDialog(this) == DialogResult.OK)
             {
                 HasUnsavedData = true;
-                MainTree.AddWords(tmp.Output);
-                DrawTree(MainTree, MainTreeView);
+                MainSet.Add(tmp.Result.PersonnelNumber, tmp.Result);
+                DrawSet(MainSet, MainDataGridView);
             }
         }
 
-        public void DeleteTreeMod()
+        public void DeleteSetDeleteMod()
         {
-            WordsForm tmp = new WordsForm("Удалить", "Введите слово или слова:");
+            
+            RecordForm tmp = new RecordForm("Удалить", "Введите слово или слова:");
             if (tmp.ShowDialog(this) == DialogResult.OK)
             {
                 HasUnsavedData = true;
-                MainTree.DeleteWords(tmp.Output);
-                DrawTree(MainTree, MainTreeView);
+                MainSet.DeleteWords(tmp.Output);
+                DrawSet(MainSet, MainDataGridView);
             }
         }
 
-        public void ClearTreeMod()
+        public void ClearSetDeleteMod()
         {
             HasUnsavedData = true;
-            MainTree.ClearTree();
-            MainTreeView.Nodes.Clear();
+            MainSet.ClearTree();
+            MainDataGridView.Nodes.Clear();
         }
 
-        public void FindTreeOp()
+        public void FindSetOp()
         {
             WordsForm tmp = new WordsForm("Найти", "Введите слово или слова:");
             if (tmp.ShowDialog(this) == DialogResult.OK)
             {
                 string buffer = "";
                 string[] tmps = tmp.Output.ToWords();
-                bool[] tmpb = MainTree.FindWords(tmp.Output);
+                bool[] tmpb = MainSet.FindWords(tmp.Output);
                 for (int i = 0; i < tmps.Length; i++)
                 {
                     buffer += $"{i + 1}. Слово \"{tmps[i]}\" {(tmpb[i] ? "при" : "от")}сутствует в дереве.\n";
                 }
                 MessageBox.Show(this, buffer, "Результат", MessageBoxButtons.OK);
-            }
-        }
-
-        public void SuggestTreeOp()
-        {
-            UseWaitCursor = true;
-            WordsForm tmp = new WordsForm("Достроить слово", "Введите часть слова:", WordsForm.InputFormat.Word);
-            if (tmp.ShowDialog(this) == DialogResult.OK)
-            {
-                string req = tmp.Output.ToWord();
-                string buffer = $"Возможные продолжения {req}-\n";
-                string[] tmpres = MainTree.Suggest(tmp.Output);
-                for (int i = 0; i < tmpres.Length - 1; i++)
-                {
-                    buffer += $"{req}{tmpres[i]}, ";
-                }
-                if (tmpres.Length != 0) buffer += $"{req}{tmpres[tmpres.Length - 1]}.";
-                MessageBox.Show(this, buffer, "Результат", MessageBoxButtons.OK);
-            }
-            UseWaitCursor = false;
-        }
-
-        public void TaskTreeOp()
-        {
-            WordsForm tmp = new WordsForm("Удалить по букве", "Введите букву:", WordsForm.InputFormat.Letter);
-            if (tmp.ShowDialog(this) == DialogResult.OK)
-            {
-                HasUnsavedData = true;
-                char c = tmp.Output[0];
-                MainTree.DeleteByLetter(c);
-                DrawTree(MainTree, MainTreeView);
             }
         }
 
@@ -189,8 +205,8 @@ namespace STRIALG_TRIE
 
             UpdateState();
 
-            FileNameLabel.Text = "*.txt";
-            SaveFileDialogWindow.Filter = OpenFileDialogWindow.Filter = "Текстовые файлы|*.txt";
+            FileNameLabel.Text = "*.bin";
+            SaveFileDialogWindow.Filter = OpenFileDialogWindow.Filter = "Текстовые файлы (*.txt)|*.txt|Типизированные файлы (*.bin)|*.bin";
 
             // Привязка метода создания файла
             CreateFileStripItem.Click += (obj, ev) => CreateFile();
@@ -201,26 +217,26 @@ namespace STRIALG_TRIE
             OpenFileToolStripItem.Click += (obj, ev) => OpenFile();
 
             // Привязка метода сохранения файла
-            SaveFileStripItem.Click += (obj, ev) => SaveFile(CurrentFilePath == "*.txt");
-            SaveFileToolStripItem.Click += (obj, ev) => SaveFile(CurrentFilePath == "*.txt");
+            SaveFileStripItem.Click += (obj, ev) => SaveFile(CurrentFilePath == "*.bin");
+            SaveFileToolStripItem.Click += (obj, ev) => SaveFile(CurrentFilePath == "*.bin");
 
             SaveAsFileStripItem.Click += (obj, ev) => SaveFile(true);
 
             // Привязка метода добавления слова в дерево
-            AddTreeModStripItem.Click += (obj, ev) => AddTreeMod();
-            AddTreeModToolStripItem.Click += (obj, ev) => AddTreeMod();
+            AddSetCreateModStripItem.Click += (obj, ev) => AddSetCreateMod();
+            AddSetCreateModToolStripItem.Click += (obj, ev) => AddSetCreateMod();
 
             // Привязка метода удаления слова из дерева
-            DeleteTreeModStripItem.Click += (obj, ev) => DeleteTreeMod();
-            DeleteTreeModToolStripItem.Click += (obj, ev) => DeleteTreeMod();
+            DeleteSetDeleteModStripItem.Click += (obj, ev) => DeleteSetDeleteMod();
+            DeleteSetDeleteModToolStripItem.Click += (obj, ev) => DeleteSetDeleteMod();
 
             // Привязка метода очистки дерева
-            ClearTreeModStripItem.Click += (obj, ev) => ClearTreeMod();
-            ClearTreeModToolStripItem.Click += (obj, ev) => ClearTreeMod();
+            ClearSetDeleteModStripItem.Click += (obj, ev) => ClearSetDeleteMod();
+            ClearSetDeleteModToolStripItem.Click += (obj, ev) => ClearSetDeleteMod();
 
             // Привязка метода поиска слова в дереве
-            FindTreeOpStripItem.Click += (obj, ev) => FindTreeOp();
-            FindTreeOpToolStripItem.Click += (obj, ev) => FindTreeOp();
+            FindSetOpStripItem.Click += (obj, ev) => FindSetOp();
+            FindSetOpToolStripItem.Click += (obj, ev) => FindSetOp();
 
             // Привязка метода закрытия формы
             ExitStripItem.Click += (obj, ev) => Close();
@@ -237,11 +253,12 @@ namespace STRIALG_TRIE
 
             SaveFileStripItem.Enabled = SaveAsFileStripItem.Enabled = SaveFileToolStripItem.Enabled = ValidateState(Actuators.Save);
 
-            AddTreeModStripItem.Enabled = AddTreeModToolStripItem.Enabled =
-            DeleteTreeModStripItem.Enabled = DeleteTreeModToolStripItem.Enabled =
-            ClearTreeModStripItem.Enabled = ClearTreeModToolStripItem.Enabled =
-            FindTreeOpStripItem.Enabled = FindTreeOpToolStripItem.Enabled = ValidateState(Actuators.TreeOps);
+            AddSetCreateModStripItem.Enabled = AddSetCreateModToolStripItem.Enabled = ValidateState(Actuators.SetCreateMods);
 
+            DeleteSetDeleteModStripItem.Enabled = DeleteSetDeleteModToolStripItem.Enabled =
+            ClearSetDeleteModStripItem.Enabled = ClearSetDeleteModToolStripItem.Enabled = ValidateState(Actuators.SetDeleteMods);
+
+            FindSetOpStripItem.Enabled = FindSetOpToolStripItem.Enabled = ValidateState(Actuators.SetOps);
 
             ExitStripItem.Enabled = ExitToolStripItem.Enabled = ValidateState(Actuators.Exit);
         }
@@ -251,70 +268,19 @@ namespace STRIALG_TRIE
             return (State & act) == act;
         }
 
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        private void DrawSet(HashSet<int, Record> set, DataGridView viewer)
         {
-            if (e.Control)
+            viewer.Rows.Clear();
+            if (!set.IsEmpty)
             {
-                switch (e.KeyCode)
+                viewer.Columns.Add("PersonnelNumber", "Табельный номер");
+                viewer.Columns.Add("FIO", "ФИО");
+                viewer.Columns.Add("Salary", "Заработная плата");
+                foreach (var entry in set)
                 {
-                    case Keys.N:
-                    {
-                        if (ValidateState(Actuators.Create)) CreateFile();
-                        break;
-                    }
-                    case Keys.O:
-                    {
-                        if (ValidateState(Actuators.Open)) OpenFile();
-                        break;
-                    }
-                    case Keys.S:
-                    {
-                        if (ValidateState(Actuators.Save)) SaveFile(CurrentFilePath == "*.txt");
-                        break;
-                    }
-                    case Keys.A:
-                    {
-                        if (ValidateState(Actuators.TreeOps)) AddTreeMod();
-                        break;
-                    }
-                    case Keys.D:
-                    {
-                        if (ValidateState(Actuators.TreeOps)) DeleteTreeMod();
-                        break;
-                    }
-                    case Keys.K:
-                    {
-                        if (ValidateState(Actuators.TreeOps)) ClearTreeMod();
-                        break;
-                    }
-                    case Keys.F:
-                    {
-                        if (ValidateState(Actuators.TreeOps)) FindTreeOp();
-                        break;
-                    }
-                    case Keys.P:
-                    {
-                        if (ValidateState(Actuators.TreeOps)) SuggestTreeOp();
-                        break;
-                    }
-                    case Keys.T:
-                    {
-                        if (ValidateState(Actuators.TreeOps)) TaskTreeOp();
-                        break;
-                    }
-                    case Keys.Q:
-                    {
-                        if (ValidateState(Actuators.Exit)) Close();
-                        break;
-                    }
+                    viewer.Rows.Add(entry.Value.PersonnelNumber, entry.Value.FIO, entry.Value.Salary);
                 }
             }
-        }
-
-        private void DrawTree(TrieTree tree, TreeView viewer)
-        {
-            viewer.Nodes.Clear();
-            if (!tree.IsEmpty) viewer.Nodes.Add(tree.ToNode("Корневой элемент"));
         }
     }
 }

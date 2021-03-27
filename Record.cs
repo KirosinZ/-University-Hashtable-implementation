@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace STRIALG_HASH
 {
-    class Record
+    public class Record
     {
         public int PersonnelNumber { get; }
         public string FIO { get; }

@@ -7,31 +7,32 @@ using System.Threading.Tasks;
 
 namespace STRIALG_HASH
 {
+    class HashSetEntry<K, V>
+    {
+        public K Key { get; set; }
+        public V Value { get; set; }
+
+        public HashSetEntry(K key, V value)
+        {
+            Key = key;
+            Value = value;
+        }
+
+        public static implicit operator V(HashSetEntry<K,V> arg)
+        {
+            return arg.Value;
+        }
+
+        public static implicit operator bool(HashSetEntry<K, V> arg) => arg != null;
+    }
+
+    [Serializable]
     class HashSet<Key, Value> : IEnumerable<HashSetEntry<Key, Value>>
     {
         const int InitialSize = 8;
 
-        class Entry<K,V>
-        {
-            public K Key { get; private set; }
-            public V Value { get; set; }
-
-            public Entry(K key, V value)
-            {
-                Key = key;
-                Value = value;
-            }
-
-            public static implicit operator HashSetEntry<K, V>(Entry<K, V> arg)
-            {
-                return new HashSetEntry<K, V>(arg.Key, arg.Value);
-            }
-
-            public static implicit operator bool(Entry<K, V> arg) => arg != null;
-        }
-
-        Entry<Key, Value>[] Data;
-        int rebuildsize;
+        HashSetEntry<Key, Value>[] Data = new HashSetEntry<Key, Value>[InitialSize];
+        int rebuildsize = (3 * InitialSize) / 4;
         int count = 0;
 
         int MainHash(Key item)
@@ -48,17 +49,24 @@ namespace STRIALG_HASH
         void Rebuild()
         {
             var tmp = Data;
-            Data = new Entry<Key, Value>[Data.Length * 2];
+            Data = new HashSetEntry<Key, Value>[Data.Length * 2];
             count = 0;
             rebuildsize *= 2;
             foreach (var entry in tmp.Where(x => x != null)) Add(entry.Key, entry.Value);
         }
 
-        public HashSet(int numberofitems = InitialSize)
+        public void Add(HashSetEntry<Key, Value> entry)
         {
-            if (numberofitems < InitialSize) numberofitems = InitialSize;
-            Data = new Entry<Key, Value>[numberofitems];
-            rebuildsize = (3 * numberofitems) / 4;
+            int index = MainHash(entry.Key);
+            int step = AuxHash(entry.Key);
+            int i = 0;
+            for (; Data[(index + i * step) % Data.Length]; i++)
+            {
+                if (Data[(index + i * step) % Data.Length].Key.Equals(entry.Key)) return;
+            }
+            Data[(index + i * step) % Data.Length] = entry;
+            count++;
+            if (count > rebuildsize) Rebuild();
         }
 
         public void Add(Key key, Value item)
@@ -70,9 +78,21 @@ namespace STRIALG_HASH
             {
                 if (Data[(index + i * step) % Data.Length].Key.Equals(key)) return;
             }
-            Data[(index + i * step) % Data.Length] = new Entry<Key, Value>(key, item);
+            Data[(index + i * step) % Data.Length] = new HashSetEntry<Key, Value>(key, item);
             count++;
             if (count > rebuildsize) Rebuild();
+        }
+
+        public void Edit(HashSetEntry<Key, Value> entry)
+        {
+            int index = MainHash(entry.Key);
+            int step = AuxHash(entry.Key);
+            int i = 0;
+            for (; !(Data[(index + i * step) % Data.Length] && Data[(index + i * step) % Data.Length].Key.Equals(entry.Key)); i++)
+            {
+                if (i > Data.Length) return;
+            }
+            Data[(index + i * step) % Data.Length] = entry;
         }
 
         public void Edit(Key key, Value item)
@@ -84,7 +104,7 @@ namespace STRIALG_HASH
             {
                 if (i > Data.Length) return;
             }
-            Data[(index + i * step) % Data.Length] = new Entry<Key, Value>(key, item);
+            Data[(index + i * step) % Data.Length] = new HashSetEntry<Key, Value>(key, item);
         }
 
         public bool Contains(Key key)
