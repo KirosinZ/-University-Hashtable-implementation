@@ -314,9 +314,13 @@ namespace STRIALG_HASH
             // 
             // MainDataGridView
             // 
+            this.MainDataGridView.AllowUserToAddRows = false;
+            this.MainDataGridView.AllowUserToDeleteRows = false;
+            this.MainDataGridView.AllowUserToOrderColumns = true;
             this.MainDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.MainDataGridView.Location = new System.Drawing.Point(12, 95);
             this.MainDataGridView.Name = "MainDataGridView";
+            this.MainDataGridView.ReadOnly = true;
             this.MainDataGridView.RowHeadersWidth = 51;
             this.MainDataGridView.RowTemplate.Height = 24;
             this.MainDataGridView.Size = new System.Drawing.Size(351, 348);

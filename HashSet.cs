@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace STRIALG_HASH
 {
+    [Serializable]
     class HashSetEntry<K, V>
     {
         public K Key { get; set; }
@@ -42,8 +43,8 @@ namespace STRIALG_HASH
 
         int AuxHash(Key item)
         {
-            int i = item.GetHashCode().GetHashCode();
-            return 1 + Math.Abs(i+i%2) % (Data.Length - 1);
+            int i = Math.Abs(item.GetHashCode().GetHashCode() % (Data.Length - 2));
+            return 1 + i + i % 2;
         }
 
         void Rebuild()

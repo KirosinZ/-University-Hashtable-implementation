@@ -37,7 +37,11 @@ namespace STRIALG_HASH
 
         void Do()
         {
-            if (Request()) Close();
+            if (Request())
+            {
+                DialogResult = DialogResult.OK;
+                Close();
+            }
             else MessageBox.Show(this, "Введенные данные не соответствуют формату.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 

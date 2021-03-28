@@ -101,7 +101,9 @@ namespace STRIALG_HASH
                     case ".bin":
                     {
                         BinaryFormatter bin = new BinaryFormatter();
-                        MainSet = (HashSet<int, Record>)bin.Deserialize(new FileStream(CurrentFilePath, FileMode.Open));
+                        var tmp = new FileStream(CurrentFilePath, FileMode.Open);
+                        MainSet = (HashSet<int, Record>)bin.Deserialize(tmp);
+                        tmp.Close();
                         break;
                     }
                     default: throw new Exception("Файл имел неверное расширение.");
@@ -110,7 +112,8 @@ namespace STRIALG_HASH
 
                 HasUnsavedData = false;
 
-                State = Actuators.All & ~Actuators.SetDeleteMods;
+                State = Actuators.All;
+                if (MainSet.IsEmpty) State &= ~Actuators.SetDeleteMods;
                 UpdateState();
             }
         }
@@ -141,7 +144,9 @@ namespace STRIALG_HASH
                 case ".bin":
                 {
                     BinaryFormatter bin = new BinaryFormatter();
-                    bin.Serialize(new FileStream(CurrentFilePath, FileMode.Create), MainSet);
+                    var tmp = new FileStream(CurrentFilePath, FileMode.Create);
+                    bin.Serialize(tmp, MainSet);
+                    tmp.Close();
                     break;
                 }
                 default: throw new Exception("Файл имел неверное расширение.");
@@ -161,6 +166,7 @@ namespace STRIALG_HASH
                 DrawSet(MainSet, MainDataGridView);
 
                 State = Actuators.All;
+                UpdateState();
             }
         }
 
@@ -173,7 +179,11 @@ namespace STRIALG_HASH
                 HasUnsavedData = true;
                 MainSet.Delete(tmp.Result);
                 DrawSet(MainSet, MainDataGridView);
-                if (MainSet.IsEmpty) State = State & ~Actuators.SetDeleteMods;
+                if (MainSet.IsEmpty)
+                {
+                    State &= ~Actuators.SetDeleteMods;
+                    UpdateState();
+                }
             }
         }
 
@@ -182,7 +192,8 @@ namespace STRIALG_HASH
             HasUnsavedData = true;
             MainSet.Clear();
             DrawSet(MainSet, MainDataGridView);
-            State = State & ~Actuators.SetDeleteMods;
+            State &= ~Actuators.SetDeleteMods;
+            UpdateState();
         }
 
         public void FindSetOp()
@@ -270,6 +281,7 @@ namespace STRIALG_HASH
         private void DrawSet(HashSet<int, Record> set, DataGridView viewer)
         {
             viewer.Rows.Clear();
+            viewer.Columns.Clear();
             if (!set.IsEmpty)
             {
                 viewer.Columns.Add("PersonnelNumber", "Табельный номер");
