@@ -133,7 +133,6 @@ namespace STRIALG_HASH
                 case ".txt":
                 {
                     StreamWriter text = new StreamWriter(CurrentFilePath);
-                    MainSet = new HashSet<int, Record>();
                     foreach (var s in MainSet)
                     {
                         text.WriteLine(ToText(s));
