@@ -31,18 +31,18 @@ namespace STRIALG_HASH
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.FileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CreateFileStripItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenFileStripItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveFileStripItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveAsFileStripItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dToolStripMenuItem = new System.Windows.Forms.ToolStripSeparator();
             this.ExitStripItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.редактированиеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.EditingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AddSetCreateModStripItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DeleteSetDeleteModStripItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ClearSetDeleteModStripItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.поискToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FindSetOpStripItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.CreateFileToolStripItem = new System.Windows.Forms.ToolStripButton();
@@ -69,27 +69,27 @@ namespace STRIALG_HASH
             // 
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.файлToolStripMenuItem,
-            this.редактированиеToolStripMenuItem,
-            this.поискToolStripMenuItem});
+            this.FileToolStripMenuItem,
+            this.EditingToolStripMenuItem,
+            this.SearchToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(375, 28);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // файлToolStripMenuItem
+            // FileToolStripMenuItem
             // 
-            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.FileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CreateFileStripItem,
             this.OpenFileStripItem,
             this.SaveFileStripItem,
             this.SaveAsFileStripItem,
             this.dToolStripMenuItem,
             this.ExitStripItem});
-            this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
-            this.файлToolStripMenuItem.Size = new System.Drawing.Size(59, 24);
-            this.файлToolStripMenuItem.Text = "Файл";
+            this.FileToolStripMenuItem.Name = "FileToolStripMenuItem";
+            this.FileToolStripMenuItem.Size = new System.Drawing.Size(59, 24);
+            this.FileToolStripMenuItem.Text = "Файл";
             // 
             // CreateFileStripItem
             // 
@@ -134,15 +134,15 @@ namespace STRIALG_HASH
             this.ExitStripItem.Size = new System.Drawing.Size(224, 26);
             this.ExitStripItem.Text = "Выйти";
             // 
-            // редактированиеToolStripMenuItem
+            // EditingToolStripMenuItem
             // 
-            this.редактированиеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.EditingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.AddSetCreateModStripItem,
             this.DeleteSetDeleteModStripItem,
             this.ClearSetDeleteModStripItem});
-            this.редактированиеToolStripMenuItem.Name = "редактированиеToolStripMenuItem";
-            this.редактированиеToolStripMenuItem.Size = new System.Drawing.Size(137, 24);
-            this.редактированиеToolStripMenuItem.Text = "Редактирование";
+            this.EditingToolStripMenuItem.Name = "EditingToolStripMenuItem";
+            this.EditingToolStripMenuItem.Size = new System.Drawing.Size(137, 24);
+            this.EditingToolStripMenuItem.Text = "Редактирование";
             // 
             // AddSetCreateModStripItem
             // 
@@ -168,13 +168,13 @@ namespace STRIALG_HASH
             this.ClearSetDeleteModStripItem.Size = new System.Drawing.Size(270, 26);
             this.ClearSetDeleteModStripItem.Text = "Очистить дерево...";
             // 
-            // поискToolStripMenuItem
+            // SearchToolStripMenuItem
             // 
-            this.поискToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.SearchToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.FindSetOpStripItem});
-            this.поискToolStripMenuItem.Name = "поискToolStripMenuItem";
-            this.поискToolStripMenuItem.Size = new System.Drawing.Size(66, 24);
-            this.поискToolStripMenuItem.Text = "Поиск";
+            this.SearchToolStripMenuItem.Name = "SearchToolStripMenuItem";
+            this.SearchToolStripMenuItem.Size = new System.Drawing.Size(66, 24);
+            this.SearchToolStripMenuItem.Text = "Поиск";
             // 
             // FindSetOpStripItem
             // 
@@ -352,9 +352,9 @@ namespace STRIALG_HASH
         #endregion
 
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem редактированиеToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem поискToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem FileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem EditingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem SearchToolStripMenuItem;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton CreateFileToolStripItem;
         private System.Windows.Forms.ToolStripButton OpenFileToolStripItem;

@@ -153,47 +153,46 @@ namespace STRIALG_HASH
 
         public void AddSetCreateMod()
         {
-            RecordForm tmp = new RecordForm("Добавить", "Создание записи:");
+            RecordForm tmp = new RecordForm("Добавить", "Создание записи");
             if (tmp.ShowDialog(this) == DialogResult.OK)
             {
                 HasUnsavedData = true;
                 MainSet.Add(tmp.Result.PersonnelNumber, tmp.Result);
                 DrawSet(MainSet, MainDataGridView);
+
+                State = Actuators.All;
             }
         }
 
         public void DeleteSetDeleteMod()
         {
             
-            RecordForm tmp = new RecordForm("Удалить", "Введите слово или слова:");
+            KeyForm tmp = new KeyForm("Удалить", "Введите ключ");
             if (tmp.ShowDialog(this) == DialogResult.OK)
             {
                 HasUnsavedData = true;
-                MainSet.DeleteWords(tmp.Output);
+                MainSet.Delete(tmp.Result);
                 DrawSet(MainSet, MainDataGridView);
+                if (MainSet.IsEmpty) State = State & ~Actuators.SetDeleteMods;
             }
         }
 
         public void ClearSetDeleteMod()
         {
             HasUnsavedData = true;
-            MainSet.ClearTree();
-            MainDataGridView.Nodes.Clear();
+            MainSet.Clear();
+            DrawSet(MainSet, MainDataGridView);
+            State = State & ~Actuators.SetDeleteMods;
         }
 
         public void FindSetOp()
         {
-            WordsForm tmp = new WordsForm("Найти", "Введите слово или слова:");
+            KeyForm tmp = new KeyForm("Найти", "Введите ключ");
             if (tmp.ShowDialog(this) == DialogResult.OK)
             {
-                string buffer = "";
-                string[] tmps = tmp.Output.ToWords();
-                bool[] tmpb = MainSet.FindWords(tmp.Output);
-                for (int i = 0; i < tmps.Length; i++)
-                {
-                    buffer += $"{i + 1}. Слово \"{tmps[i]}\" {(tmpb[i] ? "при" : "от")}сутствует в дереве.\n";
-                }
-                MessageBox.Show(this, buffer, "Результат", MessageBoxButtons.OK);
+                HashSetEntry<int, Record> entry = MainSet.Find(tmp.Result);
+                if (entry) MessageBox.Show(this, $"Запись по ключу {entry.Key}:\nТабельный номер: {entry.Value.PersonnelNumber}\nФИО: {entry.Value.FIO}\nЗарплата: {entry.Value.Salary} рублей.", "Результат поиска", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else MessageBox.Show(this, "Записи с таким ключом нет.", "Результат поиска", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

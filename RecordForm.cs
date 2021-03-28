@@ -16,27 +16,12 @@ namespace STRIALG_HASH
 
         bool CheckFIO(string s, out string fio)
         {
-            string[] props;
-            if ((props = s.Split(' ')).Length != 3)
+            if (s.IndexOfAny("1234567890()[]{}<>;:,.!?@#$%^&*-_=+\\\'\"|".ToCharArray()) != -1)
             {
                 fio = "";
                 return false;
             }
-            foreach(string si in props)
-            {
-                if (si[0].ToString() == s[0].ToString().ToLower())
-                {
-                    fio = "";
-                    return false;
-                }
-                string tmp = si.Remove(0, 1);
-                if (tmp.ToLower() != tmp)
-                {
-                    fio = "";
-                    return false;
-                }
-            }
-            fio = s;
+            fio = s.Trim(' ');
             return true;
         }
 

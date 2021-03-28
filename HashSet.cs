@@ -141,6 +141,14 @@ namespace STRIALG_HASH
                 if (i > Data.Length) return;
             }
             Data[(index + i * step) % Data.Length] = null;
+            count--;
+        }
+
+        public void Clear()
+        {
+            Data = new HashSetEntry<Key, Value>[InitialSize];
+            rebuildsize = (3 * InitialSize) / 4;
+            count = 0;
         }
 
         public IEnumerator<HashSetEntry<Key, Value>> GetEnumerator()
